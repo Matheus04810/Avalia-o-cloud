@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    container_name: app_prova
+    ports:
+      - "8080:5000"
+    depends_on:
+      - cache_db
+    networks:
+      - network_prova
+
+  cache_db:
+    image: redis:alpine
+    container_name: redis_prova_container
+    environment:
+      REDIS_USER: provados
+      REDIS_PASSWORD: ads2026
+      REDIS_DB: ads_infra
+    volumes:
+      - redis_prova:/data
+    networks:
+      - network_prova
+
+volumes:
+  redis_prova:
+
+networks:
+  network_prova:
+    driver: bridge

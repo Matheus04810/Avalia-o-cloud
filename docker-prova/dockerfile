@@ -1,0 +1,22 @@
+# Imagem base leve (alpine) → menor tamanho e menor superfície de ataque
+FROM python:3.11-alpine
+
+# Define diretório de trabalho
+WORKDIR /app
+
+# Copia apenas dependências primeiro (melhor uso de cache)
+COPY requirements.txt .
+
+# Instala dependências agrupando comandos e limpando cache
+RUN apk add --no-cache build-base && \
+    pip install --no-cache-dir -r requirements.txt && \
+    rm -rf /root/.cache
+
+# Copia restante da aplicação
+COPY . .
+
+# Expõe porta da aplicação
+EXPOSE 5000
+
+# Comando de inicialização
+CMD ["python", "app.py"]
